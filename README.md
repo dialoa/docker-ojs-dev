@@ -98,8 +98,8 @@ The `volumes` folder gives you access to several of the website folders:
 * `volumes/plugins`: OJS's plugins folder. Initially contains only links 
 	to the core plugins which you can't open from outside the container.
 	Used to download plugins or develop your own (see below).
-* `volumes/database`: the database file. Don't touch them; use PHPMyAdmin
-	instead.
+* `volumes/database`: the database files. Don't touch them; use 
+	PHPMyAdmin instead.
 
 You can also inspect and change OJS's config file:
 
@@ -121,7 +121,7 @@ docker exec -it app_ojs-dev /bin/sh
 
 The database server is `db_ojs-dev` and the PHPMyAdmin server is 
 `PHPMyAdmin_ojs-dev`. If you have changed the default container names
-in the `.env` files adapt accordingly.
+ adapt accordingly.
 
 The command line above assumes the container runs Alpine Linux. Others
 may work with `/bin/bash` instead. If in doubt, 
@@ -187,15 +187,26 @@ The startup script will then fill in your new `importexport` folder
 with symbolic links to the other importexport folders. __Or better,
 simply stop your container when you're installing a new plugin.__
 
-## Advanced
+## Advanced configuration
 
 `ojs.config.inc.php` contains OJS's configuration file 
 (`config.inc.php`). 
 
 The `.env` and `docker-compose.yml` contain most of the configuration:
-MySQL root password, username and password, ports, shared volumes.
-If you modify them you need to restart the container 
+container names, MySQL root password, username and password, ports, 
+shared volumes. If you modify them you need to restart the container 
 (`docker-compose restart`).
+
+In `volumes/config` you can create some configuration files. You need
+to uncomment the corresponding lines in `docker-compose.yml` and 
+relauch the containers:
+
+* `apache.htaccess`: a `.htaccess` file (`\var\www\html\.htaccess` within
+  the container)
+* `php.custom.ini`: a `php.custom.ini` file (`/etc/php7/php.custom.ini`
+	within the container)
+* `db.charset.conf`: a mysql charset conf file 
+	(`/etc/mysql/conf.d/charset.cnf` within the container)
 
 The `services/php74` folder is used to create the OJS server. Its 
 `root` subfolder is copied at the `/` within the container. 
@@ -210,7 +221,7 @@ In particular:
 		`volumes/plugins-backup` within the container)
 	- other scripts are from 
 		PKP's docker-ojs](https://github.com/pkp/docker-ojs)
-* `etc/apache2/conf.d/ojs.conf` contains the apache consideration
+* `etc/apache2/conf.d/ojs.conf` contains the apache configuration.
 
 If you modify anything in `services/php74` you need to rebuild the
 docker image used by the container: run `docker-compose build` at 
