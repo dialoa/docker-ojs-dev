@@ -2,12 +2,17 @@
 
 # Core OJS plugins have been copied in $(pwd)/plugins-backup/ (Dockerfile)
 # We ensure they are available in /plugins unless already provided by
-# the user: any folder or level-1 subfolder present in plugins-backup/
-# but missing in plugins/ is symlinked.
+# the user: we copy the folders and symlink any missing folder
+# `plugins-backup/` but missing in ``plugins/`.
 for srcdir in plugins-backup/*; do
     dirname=${srcdir#plugins-backup/}
     if ! [ -d "plugins/${dirname}" ]; then
-        ln -s "$(pwd)/plugins-backup/${dirname}" "$(pwd)/plugins/${dirname}"
+        mkdir "$(pwd)plugins/${dirname}"
+        for subsrcdir in plugins-backup/${dirname}/*; do
+            subdirname=${subsrcdir#plugins-backup/${dirname}/}
+            ln -s "$(pwd)/plugins-backup/${dirname}/${subdirname}" \
+                        "$(pwd)/plugins/${dirname}/${subdirname}"
+        done
     else
         for subsrcdir in plugins-backup/${dirname}/*; do
             subdirname=${subsrcdir#plugins-backup/${dirname}/}

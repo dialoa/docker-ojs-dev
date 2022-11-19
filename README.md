@@ -126,6 +126,20 @@ The database server is `db_ojs-dev` and the PHPMyAdmin server is
 The command line above assumes the container runs Alpine Linux. Others
 may work with `/bin/bash` instead. If in doubt, 
 
+### Installing plugins
+
+#### From the web interface
+
+
+
+Plugins cannot be installed through the web interface. They must be 
+downloaded and placed in suitable folders within `volumes/plugins/`.
+For instance, to install the Bootstrap 3 theme plugin, download it (from
+the GitHub repository) and place it 
+in `volumes/plugins/themes/bootstrap3/`. You may need to replace the 
+`themes` symbolic link with a folder. Relaunch the container and the
+plugin should appear as installed.
+
 ## Develop plugins and themes
 
 ### Tutorial
@@ -226,6 +240,20 @@ In particular:
 If you modify anything in `services/php74` you need to rebuild the
 docker image used by the container: run `docker-compose build` at 
 the root of the directory. Make sure the container is down first.
+
+## Troubleshooting
+
+### First OJS login requires an internet connection
+
+Right after OJS is installed, you are sent to the login page. If you 
+don't have an internet connection, you'll only get a blank page. The
+apache log will display the following PHP error:
+
+```
+[php7:error] [pid 59] [client 172.20.0.1:62212] PHP Fatal error:  Uncaught GuzzleHttp\\Exception\\ConnectException: cURL error 6: Could not resolve host: pkp.sfu.ca (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) in /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php:200\nStack trace:\n#0 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php(155): GuzzleHttp\\Handler\\CurlFactory::createRejection()\n#1 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php(105): GuzzleHttp\\Handler\\CurlFactory::finishError()\n#2 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlHandler.php(43): GuzzleHttp\\Handler\\CurlFactory::finish()\n#3 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/Proxy.php(28): GuzzleHttp\\Handler\\CurlHandler->__invoke()\n#4 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/Proxy.php(51): GuzzleHttp\\Handler\\Proxy::GuzzleHttp\\Handler\\{closure}()\n#5 /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/PrepareBodyMiddleware.php(37): GuzzleHttp\\Handler\\P in /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php on line 200, referer: http://localhost:8081/index.php/index/login
+```
+
+*Solution*. You need an active internet collection on your first login.
 
 ## Credits
 

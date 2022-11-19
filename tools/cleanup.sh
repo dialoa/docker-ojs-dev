@@ -10,6 +10,9 @@ PRIVATE=volumes/private
 PUBLIC=volumes/public
 PLUGINS=volumes/plugins
 
+echo This script must be launched from the base of the repo
+echo sh tools/cleanup.sh
+
 read -p "WARNING: Do you want to erase the site's user data \
 (config, accounts, journals, article files, logs)? (y/N) " ans
 
