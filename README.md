@@ -47,7 +47,11 @@ install page. You MUST use the following settings:
 * database name: `ojs`
 
 Fill in the rest as you wish and install OJS. You can create a journal,
-publish articles and download plugins.
+publish articles.
+
+To download plugins, you have to make the `/volumes/plugins` folder
+of the repository writable by the docker-contained application. 
+See below.
 
 Once you are done, return to the
 terminal and use:
@@ -130,17 +134,19 @@ may work with `/bin/bash` instead. If in doubt,
 
 #### From the web interface
 
+Make the folder `volumes/plugins` writable by all:
 
+```bash
+chmod -R a+rwx plugins 
+```
 
-Plugins cannot be installed through the web interface. They must be 
-downloaded and placed in suitable folders within `volumes/plugins/`.
-For instance, to install the Bootstrap 3 theme plugin, download it (from
-the GitHub repository) and place it 
-in `volumes/plugins/themes/bootstrap3/`. You may need to replace the 
-`themes` symbolic link with a folder. Relaunch the container and the
-plugin should appear as installed.
+Browse to the application. You can now download and install
+plugins. After installation, they are available outside 
+of the container in `volumes/plugins`. You can modify
+them for development.
 
-## Develop plugins and themes
+You can also download or create your own plugins. Place them
+within the `volumes/plugins` subfolders. 
 
 ### Tutorial
 

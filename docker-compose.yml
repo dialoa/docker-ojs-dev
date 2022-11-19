@@ -13,7 +13,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-ojsPwd}"
       MYSQL_DATABASE: "${MYSQL_DATABASE:-ojs}"
       MYSQL_USER: "${MYSQL_USER:-ojs}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-ojsPwd}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-ojs}"
     ports:
       - "${MYSQL_PORT:-3306}:3306"      
     volumes:
