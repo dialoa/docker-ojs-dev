@@ -10,7 +10,6 @@ for srcdir in plugins-backup/*; do
         mkdir "$(pwd)plugins/${dirname}"
         for srcsubdir in plugins-backup/${dirname}/*; do
             subdirname=${srcsubdir#plugins-backup/${dirname}/}
-            # ln only creates a link if the target directorty doesn't exist
             ln -s "$(pwd)/plugins-backup/${dirname}/${subdirname}" \
                         "$(pwd)/plugins/${dirname}/${subdirname}"
         done
