@@ -7,15 +7,16 @@
 for srcdir in plugins-backup/*; do
     dirname=${srcdir#plugins-backup/}
     if ! [ -d "plugins/${dirname}" ]; then
-        mkdir "$(pwd)/plugins/${dirname}"
-        for subsrcdir in plugins-backup/${dirname}/*; do
-            subdirname=${subsrcdir#plugins-backup/${dirname}/}
+        mkdir "$(pwd)plugins/${dirname}"
+        for srcsubdir in plugins-backup/${dirname}/*; do
+            subdirname=${srcsubdir#plugins-backup/${dirname}/}
+            # ln only creates a link if the target directorty doesn't exist
             ln -s "$(pwd)/plugins-backup/${dirname}/${subdirname}" \
                         "$(pwd)/plugins/${dirname}/${subdirname}"
         done
     else
-        for subsrcdir in plugins-backup/${dirname}/*; do
-            subdirname=${subsrcdir#plugins-backup/${dirname}/}
+        for srcsubdir in plugins-backup/${dirname}/*; do
+            subdirname=${srcsubdir#plugins-backup/${dirname}/}
             if ! [ -d "plugins/${dirname}/${subdirname}" ]; then
                 ln -s "$(pwd)/plugins-backup/${dirname}/${subdirname}" \
                         "$(pwd)/plugins/${dirname}/${subdirname}"
