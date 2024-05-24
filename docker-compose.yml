@@ -27,7 +27,7 @@ services:
 
   ojs:
     build:
-      context: ./services/${PHPVERSION}
+      context: ./services/${OJSVERSION}/${PHPVERSION}
     container_name: "app_${COMPOSE_PROJECT_NAME:-ojs-dev}"
     hostname: "${COMPOSE_PROJECT_NAME:-ojs-dev}"
     ports:
@@ -40,7 +40,7 @@ services:
       - ./volumes/plugins:/var/www/html/plugins
       - ./volumes/logs/apache:/var/log/apache2
 #      # WARNING: You can only enable file-volumes if file exists in the container.
-      - ./volumes/config/ojs.config.inc.php:/var/www/html/config.inc.php
+      - ./volumes/config/config.inc.php:/var/www/html/config.inc.php
 #      - ./volumes/config/apache.htaccess:/var/www/html/.htaccess
 #      - ./volumes/php.custom.ini:/etc/php7/php.custom.ini
     networks:
@@ -50,7 +50,8 @@ services:
     restart: always
 
   phpmyadmin:
-    image: phpmyadmin:5.2.0-apache
+    build:
+      context: ./services/${PHPMYADMIN}
     container_name: "PHPMyAdmin-${COMPOSE_PROJECT_NAME:-bareDAMP}"
     networks:
       - inside
@@ -69,5 +70,4 @@ services:
       MEMORY_LIMIT: "${MEMORY_LIMIT:-512M}"
     ports:
       - "${PHPHMYADMIN_HTTP_PORT:-8082}:80"
-      - "${PHPMYADMIN_HTTPS_PORT:-8443}:443"
 

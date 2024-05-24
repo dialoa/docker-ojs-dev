@@ -1,19 +1,20 @@
 # Docker OJS dev
 
-A docker container for Open Journal Systems for developing plugin and
-themes. 
+A docker container for Open Journal Systems for developing themes and plugins.
 
 Creates an OJS installation, persists the OJS database and files and
-opens OJS's plugin folder to the host. PHPMyAdmin is installed too. 
+opens OJS's plugins folder to the host. Allows you to download, modify or 
+create OJS themes and plugins. PHPMyAdmin is installed too. 
+
 Currently runs:
 
-* Open Journal Systems 3.3.0-11
-* Alpine Linux 3.15, PHP 7.4, MariaDB 10.5, PHPMyAdmin 5.2.0
+* Open Journal Systems 3.4.0 stable
+* Alpine Linux 3.16, PHP 8.1, MariaDB 11.2, PHPMyAdmin 5.2.0
 
 Meant for local development only. Largely based on 
 [PKP's docker-ojs](https://github.com/pkp/docker-ojs).
 
-Copyright (2022) Julien Dutant, GPL3 license.
+Copyright 2022-24 Julien Dutant, GPL3 license.
 
 ## Basic usage
 
@@ -31,10 +32,12 @@ The first run might take some time (downloading and creating container
 images). If all goes well a local web server is set up with the 
 following addresses:
 
-* `http://localhost:8081` Open Journal Systems
-* `https://localhost:8481` Open Journal Systems
+* `https://localhost:8081` Open Journal Systems
+* `https://localhost:8481` Open Journal Systems (SSL connection)
 * `http://localhost:8082` PHPMyAdmin
-* `http:s//localhost:8482` PHPMyAdmin
+
+(There is not much point in using the SSL port. If you do, your browser
+will warn you that the site's certificate isn't trusted. Bypass the warning.)
 
 Open a browser and navigate to `localhost:8081`. This will open the OJS
 install page. You MUST use the following settings:
@@ -65,6 +68,11 @@ To stop the container. You can recreate the container with
 articles, files, plugins and their settings). Shut it again with 
 `docker-compose down`. 
 
+### Update
+
+If you've updated this repo or the docker image definition, rebuild
+your docker images with `docker-compose build`. 
+
 ### Cleanup
 
 If you want to erase your user data and start with a fresh
@@ -74,16 +82,11 @@ install, use the cleanup script:
 ./tools/cleanup.sh
 ```
 
-This will ask you separately whether to erase user data (accounts, 
-journals, articles etc.) and whether to erase any custom OJS plugins
+The script offers you the option to clean the site data (OJS config,
+accounts, journals, articles etc.) and any custom OJS plugins
 you've added or developed.
 
 Make sure the container is down first (`docker-compose down`).
-
-_NOTE:_ the script assumes the file
-`volumes/config/ojs.config.TEMPLATE.inc.php` is present. Do not delete
-it. If needed, recreate it: it's the `config.TEMPLATE.inc.php` file of
-the OJS version you use. 
 
 ### PHPMyAdmin
 

@@ -116,7 +116,7 @@ show_upgrade_warning = On
 
 ; Set the following parameter to off if you want to work with the uncompiled (non-minified) JavaScript
 ; source for debugging or if you are working off a development branch without compiled JavaScript.
-enable_minified = Off
+enable_minified = On
 
 ; Provide a unique site ID and OAI base URL to PKP for statistics and security
 ; alert purposes only.
@@ -133,6 +133,10 @@ sitewide_privacy_statement = Off
 ; their account, and they have not validated their account or logged in. If the user_validation_period is set to
 ; 0, unvalidated accounts will never be removed. Use this setting to automatically remove bot registrations.
 user_validation_period = 28
+
+; Turn sandbox mode to On in order to prevent the software from interacting with outside systems.
+; Use this for development or testing purposes.
+sandbox = Off
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -558,15 +562,3 @@ job_runner_max_memory = 80
 ; Remove failed jobs from the database after the following number of days.
 ; Remove this setting to leave failed jobs in the database.
 delete_failed_jobs_after = 180
-
-[invitations]
-expiration_days = 3
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-; New Features Settings ;
-;;;;;;;;;;;;;;;;;;;;;;;;;
-
-[features]
-
-enable_new_submission_listing = Off
-
