@@ -11,6 +11,8 @@ Currently runs:
 * Open Journal Systems 3.4.0 stable
 * Alpine Linux 3.16, PHP 8.1, MariaDB 11.2, PHPMyAdmin 5.2.0
 
+But older versions are easily configurable.
+
 Meant for local development only. Largely based on 
 [PKP's docker-ojs](https://github.com/pkp/docker-ojs).
 
@@ -51,6 +53,10 @@ install page. You MUST use the following settings:
 
 Fill in the rest as you wish and install OJS. You can create a journal,
 publish articles.
+
+_Note_. As of OJS versions 3.3, 3.4, you need to have an active internet
+connection when installing OJS in the Docker. 
+See [below](#troubleshooting) for details.
 
 To download plugins, you have to make the `/volumes/plugins` folder
 of the repository writable by the docker-contained application. 
@@ -110,8 +116,7 @@ The `volumes` folder gives you access to several of the website folders:
 
 You can also inspect and change OJS's config file:
 
-* `volumes/config/ojs.config.inc.php`: OJS's configuration file 
-	(`config.inc.php`)
+* `volumes/config/config.inc.php`: OJS's configuration file
 
 ### Terminal
 
@@ -210,10 +215,32 @@ The startup script will then fill in your new `importexport` folder
 with symbolic links to the other importexport folders. __Or better,
 simply stop your container when you're installing a new plugin.__
 
-## Advanced configuration
+## Customization
 
-`ojs.config.inc.php` contains OJS's configuration file 
-(`config.inc.php`). 
+### Run older versions of OJS
+
+OJS docker images are defined in `services/<OJS-version>`, where `<OJS-version>`
+is the name of the desired version branch of the 
+[PKP's official OJS repository](https://github.com/pkp/ojs). Each OJS version
+provides one or more Docker images; one per PHP version. Database and PHPMyAdmin
+images are provided separately.
+
+If there are folders for your desired versions, enter them in `.env`, and
+use `docker-compose build` to rebuild your images.
+
+If there is no folder for your desired version, it is easy to adapt
+the existing ones and create your own:
+
+* `config.TEMPLATE.inc.php` is OJS's template config file for your version 
+  (used by the cleanup script to reset your container data).
+* for each php version you want to provide, `php<VERSION>` should contain 
+  a Dockerfile for your image, and the files to be transferred to the 
+  image, namely apache and PHP configuration files and OJS startup 
+  scripts. 
+
+### Advanced configuration
+
+`volume/config/config.inc.php` contains OJS's configuration file.
 
 The `.env` and `docker-compose.yml` contain most of the configuration:
 container names, MySQL root password, username and password, ports, 
@@ -231,7 +258,7 @@ relauch the containers:
 * `db.charset.conf`: a mysql charset conf file 
 	(`/etc/mysql/conf.d/charset.cnf` within the container)
 
-The `services/php74` folder is used to create the OJS server. Its 
+The `services/php<VERSION>` folder is used to create the OJS server. Its 
 `root` subfolder is copied at the `/` within the container. 
 In particular:
 
@@ -262,7 +289,22 @@ apache log (`volumes/logs/apache/error.log`) displays the following PHP error:
 [php:error] [pid 165] [client 192.168.65.1:64908] PHP Fatal error:  Uncaught GuzzleHttp\\Exception\\ConnectException: cURL error 6: Could not resolve host: pkp.sfu.ca (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://pkp.sfu.ca/ojs/xml/ojs-version.xml?id=B9557820-BC35-44F4-80A4-C43E135AC5A4&oai=http%3A%2F%2Flocalhost%3A8081%2Findex.php%2Findex%2Foai in /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php:210\nStack trace:...  thrown in /var/www/html/lib/pkp/lib/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php on line 210
 ```
 
+OJS's installation script appears to need resources (namely, `guzzlehttp`) 
+from PKP's official server and fails without them.
+
 *Solution*. You need an active internet collection on your first login.
+
+### OJS CLI Install
+
+The CLI install script does not work at this stage.
+
+## Contribute
+
+PRs welcome. If you clone the repository for contributing, it's a
+good idea to keep the main or contributing branch without OJS
+installed, and a separate branch with OJS installed for testing
+purposes. Just remember to shut down the container when you're
+switching back to the main branch. 
 
 ## Credits
 
